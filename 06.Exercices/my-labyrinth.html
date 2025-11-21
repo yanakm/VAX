@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Моят лабиринт</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <script type="importmap">
+              {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "physijs": "./physijs/physi.module.js",
+			  "vax": "./vax-physi.js"
+			}
+		  }
+        </script>
+    </head>
+    <body>
+        <script type="module">
+            import * as THREE from "three";
+            import "physijs";
+            import * as VAX from "vax";
+
+            VAX.initScene(animate);
+
+            VAX.scene.remove(VAX.ground);
+            VAX.scene.remove(VAX.object);
+
+            VAX.scene.setGravity(new THREE.Vector3(0,-30,0));
+
+            VAX.camera.positiono.set(0,50,200);
+            VAX.camera.lookAt(new THREE.Vector3(0,0,0));
+
+            //Земята
+            var floor = new THREE.Mesh(
+                new THREE.BoxGeometry(204,4,204),
+                new THREE.MeshPhysicalMaterial({color: 'pink'})
+            );
+            floor.position.set(0,-2,0);
+            floor.receiveShadow=true;
+
+            var material = new THREE.MeshPhysicalMaterial({color: 'cornflowerblue',transaprent:true,opacity:0.3,depthWrite:false})
+            //капак
+            var cover = new THREE.Mesh(
+                new THREE.BoxGeometry(200,1,200),
+                material
+            )
+            cover.position.set(0,24,0);
+            floor.add(cover);
+
+            //преграда
+            function barZ(x,z0,z1){
+                var bar = new THREE.Mesh(
+                    new THREE.BoxGeometry(2,24,z1-z0),
+                    material
+                );
+                bar.position.set(x,12,z1+z0/2);
+                floor.add(bar);
+            }
+
+            barX( -100, 100, -100 );
+			barX( -100, 100, +100 );
+			barZ( -100, -100, 100 );
+			barZ( 100, -100, 100 );
+
+            VAX.scene.add(floor);
+
+            // топка
+			var geometry = new THREE.OctahedronGeometry( 9, 2 );
+			material = new THREE.MeshPhysicalMaterial({color:'crimson', roughness: 0.3, flatShading: true});
+			var ball = new Physijs.SphereMesh( geometry, material, 9);
+				ball.position.set( 0, 9, 0 );
+				ball.castShadow = true;
+			VAX.scene.add( ball );
+
+        </script>
+    </body>
+</html>
