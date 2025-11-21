@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>E0613: Гравитационен колапс</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "physijs": "./physijs/physi.module.js",
+			  "vax": "./vax-physi.js"
+			}
+		  }
+		</script>
+	</head>
+	
+	<body>
+		<script type="module">
+
+			import * as THREE from "three";
+			import "physijs";
+			import * as VAX from "vax";
+
+			VAX.init(animate);
+
+			VAX.camera.position.set(0, 0, 240);
+
+			// слънце
+			var geometry = new THREE.SphereGeometry(30, 32, 32),
+			material = Physijs.createMaterial(new THREE.MeshPhysicalMaterial({color: 'yellow', roughness: 0.3}));
+			var sun = new Physijs.SphereMesh(geometry, material, 0);
+			VAX.scene.add(sun);
+
+			// планета
+			var geometry = new THREE.SphereGeometry(10),
+			material = Physijs.createMaterial(new THREE.MeshPhysicalMaterial({color: 'gray', roughness: 0.3}));
+			var planet = new Physijs.SphereMesh(geometry, material, 10);
+			planet.position.set(150, 0, 0);
+			VAX.scene.add(planet);
+
+			var g = new THREE.Vector3();
+
+			function animate()
+			{
+				g.subVectors(sun.position, planet.position);
+
+				VAX.scene.setGravity(g);
+				VAX.scene.simulate(1/30);
+			}
+			
+		</script>
+	</body>
+</html>
+
+

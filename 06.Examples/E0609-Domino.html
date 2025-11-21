@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>E0609: Домино</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "physijs": "./physijs/physi.module.js",
+			  "vax": "./vax-physi.js"
+			}
+		  }
+		</script>
+	</head>
+	
+	<body>
+		<script type="module">
+
+			import * as THREE from "three";
+			import "physijs";
+			import * as VAX from "vax";
+
+			VAX.init(animate);
+
+			// светлина и сенки
+			VAX.renderer.shadowMap.enabled = true;
+			VAX.light.shadow.mapSize = new THREE.Vector2(1024 * 2, 1024 * 2);
+			VAX.light.position.set(-150, 300, -50);
+			VAX.light.castShadow = true;
+
+			// по-добра позиция на камерата
+			VAX.camera.position.set(0, 80, 240);
+			VAX.camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+			// земя
+			var geometry = new THREE.BoxGeometry(300, 4, 300),
+			material = Physijs.createMaterial(new THREE.MeshPhysicalMaterial({color: 'lightgreen'}));
+			var ground = new Physijs.BoxMesh(geometry, material, 0);
+			ground.position.set(0, -10, 0);
+			ground.receiveShadow = true;
+			VAX.scene.add(ground);
+
+			// плочки домино
+			var geometry = new THREE.BoxGeometry(4, 40, 15),
+			material = Physijs.createMaterial(new THREE.MeshPhysicalMaterial({color: 'hotpink'}));
+
+			for (var i = 0; i < 20; i++)
+			{
+				var domino = new Physijs.BoxMesh(geometry, material);
+				domino.position.set(15*i-140, 13, THREE.MathUtils.randFloat(-12, 12));
+				domino.receiveShadow = true;
+				domino.castShadow = true;
+
+				VAX.scene.add(domino);
+			}
+
+			function pushFirst()
+			{
+				domino.setLinearVelocity(new THREE.Vector3(-10, 0, 0));
+			}
+
+			setTimeout(pushFirst, 5000);
+
+			function animate(t)
+			{
+				VAX.scene.simulate(1/10);
+				VAX.scene.rotation.y = t/10;
+			}
+			
+		</script>
+	</body>
+</html>
+
+
