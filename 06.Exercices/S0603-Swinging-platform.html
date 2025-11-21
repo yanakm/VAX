@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>S0603: Накланяща се платформа</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "physijs": "./physijs/physi.module.js",
+			  "vax": "./vax-physi.js"
+			}
+		  }
+		</script>
+	</head>
+	
+	<body>
+		<script type="module">
+
+			import * as THREE from "three";
+			import "physijs";
+			import * as VAX from "vax";
+
+			VAX.initScene(animate);
+			
+			// земя
+			VAX.scene.remove(VAX.ground);
+			var beam = new THREE.Mesh(
+					new THREE.BoxGeometry(400, 2, 40),
+					new THREE.MeshPhysicalMaterial({color: 'gold'})
+				);
+			beam.position.set(0, -12, 0);
+			beam.receiveShadow = true;
+			VAX.scene.add(beam);
+
+			// обект
+			VAX.scene.remove(VAX.object);
+			var geometry = new THREE.IcosahedronGeometry(16, 1),
+			material = new THREE.MeshPhysicalMaterial({
+						color: 'navy',
+						roughness: 0.3,
+						flatShading: true,
+						emissive: 'navy',
+						emissiveIntensity: 1,
+					}),
+			ball = new THREE.Mesh(geometry, material);
+			ball.position.set(0, 2, 0);
+			ball.castShadow = true;
+			VAX.scene.add(ball);
+
+			function animate()
+			{
+				VAX.scene.simulate(1/10);
+			}
+			
+		</script>
+	</body>
+</html>
+
+

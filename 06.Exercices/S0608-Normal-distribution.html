@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>S0608: Нормално разпределение</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "physijs": "./physijs/physi.module.js",
+			  "vax": "./vax-physi.js"
+			}
+		  }
+		</script>
+	</head>
+	
+	<body>
+		<script type="module">
+
+			import * as THREE from "three";
+			import "physijs";
+			import * as VAX from "vax";
+
+			VAX.init(animate);
+
+			// светлина и сенки
+			VAX.renderer.shadowMap.enabled = true;
+			VAX.light.shadow.mapSize = new THREE.Vector2(1024*2, 1024*2);
+			VAX.light.position.set(-150, 300, -50);
+			VAX.light.intensity = 0.8;
+
+			var light2 = VAX.light.clone();
+			light2.intensity = 0.4;
+			light2.castShadow = true;
+			VAX.scene.add(light2);
+
+			VAX.scene.add(new THREE.AmbientLight('yellow', 0.2));
+			VAX.scene.setGravity(new THREE.Vector3(0, -10, 0));
+
+			VAX.camera.position.set(0, 20, 250);
+			VAX.camera.lookAt(new THREE.Vector3(0, 30, 0));
+
+			// прозрачен куб
+			var material = new THREE.MeshNormalMaterial({
+						transparent: true,
+						opacity: 0.3,
+						depthWrite: false,
+						depthTest: false});
+
+			// долна страна
+			var geometry = new THREE.BoxGeometry(210, 1, 20);
+			var wall = new THREE.Mesh(geometry, material);
+			wall.position.set(0, -100, 0);
+			VAX.scene.add(wall);
+
+			// лява страна
+			var geometry = new THREE.BoxGeometry(1, 300, 12);
+			var wall = new THREE.Mesh(geometry, material);
+			wall.position.set(-105, 50, 0);
+			VAX.scene.add(wall);
+
+			// дясна страна
+			var wall = new THREE.Mesh(geometry, material);
+			wall.position.set(105, 50, 0);
+			VAX.scene.add(wall);
+
+			// предна страна
+			var geometry = new THREE.BoxGeometry(210, 300, 1);
+			var wall = new THREE.Mesh(geometry, material);
+			wall.position.set(0, 50, 4);
+			VAX.scene.add(wall);
+
+			// задна страна
+			var wall = new THREE.Mesh(geometry, material);
+			wall.position.set(0, 50, -4);
+			VAX.scene.add(wall);
+
+			var gap = 19.5;
+
+			// деления отдолу
+			var geometry = new THREE.BoxGeometry(12, 80, 12);
+			var bar = new THREE.Mesh(geometry, material);
+			bar.position.set(0, -60, 0);
+			VAX.scene.add(bar);
+
+			// прегради
+			var geometry = new THREE.BoxGeometry(5, 5, 10);
+			var bar = new THREE.Mesh(geometry, material);
+			bar.rotation.z = Math.PI/4;
+			bar.position.set(0, 70, 0);
+			VAX.scene.add(bar);
+
+			// топче
+			var geometry = new THREE.IcosahedronGeometry(3.5, 3),
+			material = new THREE.MeshPhysicalMaterial({color: 'crimson'});
+
+			var ball = new THREE.Mesh(geometry, material);
+			ball.position.set(0, 140, 0);
+			VAX.scene.add(ball);
+
+			function animate(t)
+			{
+				VAX.scene.simulate(1/7);
+				VAX.scene.rotation.y = t/2+0.5*Math.sin(t+Math.PI);
+			}
+			
+		</script>
+	</body>
+</html>
+
+

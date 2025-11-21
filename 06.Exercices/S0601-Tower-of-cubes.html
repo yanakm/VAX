@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>S0601: Кула от кубчета</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "physijs": "./physijs/physi.module.js",
+			  "vax": "./vax-physi.js"
+			}
+		  }
+		</script>
+	</head>
+	
+	<body>
+		<script type="module">
+
+			import * as THREE from "three";
+			import "physijs";
+			import * as VAX from "vax";
+
+			VAX.init(animate);
+
+			// светлина и сенки
+			VAX.renderer.shadowMap.enabled = true;
+			VAX.light.shadow.mapSize = new THREE.Vector2(1024 * 2, 1024 * 2);
+			VAX.light.position.set(-150, 300, -50);
+			VAX.light.intensity = 0.8;
+
+			var light2 = VAX.light.clone();
+			light2.intensity = 1;
+			light2.castShadow = true;
+			VAX.scene.add(light2);
+
+			VAX.scene.add(new THREE.AmbientLight('yellow', 1));
+
+			VAX.camera.position.set(0, 50, 240);
+			VAX.camera.lookAt(new THREE.Vector3(0, 80, 0));
+
+			// земя
+			var geometry = new THREE.BoxGeometry(300, 4, 300),
+			material = Physijs.createMaterial(new THREE.MeshPhysicalMaterial({color: 'lightgreen'}), 1, 0);
+			var ground = new Physijs.BoxMesh(geometry, material, 0);
+			ground.position.set(0, -10, 0);
+			ground.receiveShadow = true;
+			VAX.scene.add(ground);
+
+			// кубчета
+			var geometry = new THREE.BoxGeometry(20, 20, 20),
+			material = Physijs.createMaterial(new THREE.MeshPhysicalMaterial({color: 'hotpink'}), 1, 0);
+			
+			var cube = new Physijs.BoxMesh(geometry, material);
+			cube.position.set(0, 100, 0);
+			cube.receiveShadow = true;
+			cube.castShadow = true;
+			VAX.scene.add(cube);
+
+			function animate(t)
+			{
+				VAX.scene.simulate(1/10);
+
+				VAX.scene.rotation.y = t/10;
+			}
+			
+		</script>
+	</body>
+</html>
+
+

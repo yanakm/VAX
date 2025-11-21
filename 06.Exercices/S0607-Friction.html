@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>S0607: Триене</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "physijs": "./physijs/physi.module.js",
+			  "vax": "./vax-physi.js"
+			}
+		  }
+		</script>
+	</head>
+	
+	<body>
+		<script type="module">
+
+			import * as THREE from "three";
+			import "physijs";
+			import * as VAX from "vax";
+
+			VAX.initScene(animate);
+	
+			VAX.scene.remove(VAX.ground);
+			VAX.scene.remove(VAX.object);
+
+			// земя
+			var beam = new THREE.Mesh(
+					new THREE.BoxGeometry(500, 4, 100),
+					new THREE.MeshPhysicalMaterial({color: 'lightgreen'}));
+			beam.position.set(0, -2, 0);
+			beam.receiveShadow = true;
+			VAX.scene.add(beam);
+
+			var geometry = new THREE.BoxGeometry(20, 20, 20);
+
+			// обект 1
+			var material1 = new THREE.MeshPhysicalMaterial({
+						color: 'lightgray',
+						roughness: 0.3});
+			var object1 = new THREE.Mesh(geometry, material1);
+			object1.position.set(0, 15, 33);
+			object1.castShadow = true;
+			VAX.scene.add(object1);
+
+			// обект 2
+			var material2 = new THREE.MeshPhysicalMaterial({
+						color: 'lightgray',
+						roughness: 0.3});
+			var object2 = new THREE.Mesh(geometry, material2);
+			object2.position.set(0, 15, 0);
+			object2.castShadow = true;
+			VAX.scene.add(object2);
+
+			// обект 3
+			var material3 = new THREE.MeshPhysicalMaterial({
+						color: 'lightgray',
+						roughness: 0.3});
+			var object3 = new THREE.Mesh(geometry, material3);
+			object3.position.set(0, 15, -33);
+			object3.castShadow = true;
+			VAX.scene.add(object3);
+
+			window.addEventListener('pointermove', onPointerMove, false);
+
+			var pos = 0;
+			function onPointerMove(event)
+			{
+				// относителна хоризонтална позиция на мишката
+				pos = event.clientX/window.innerWidth - 0.5;
+			}
+
+			function animate()
+			{
+				VAX.scene.simulate(1/20);
+				beam.rotation.z = THREE.MathUtils.lerp(beam.rotation.z, pos, 0.1);
+			}
+			
+		</script>
+	</body>
+</html>
+
+
