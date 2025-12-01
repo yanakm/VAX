@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>E0905: Ориентация на устройство</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+	</head>
+	
+	<body>
+		<button id="permissionButton" onClick="startOrientation()">Give Permission</button>
+		<h3>alpha = <span id="alpha"></span></h3>
+		<h3>beta = <span id="beta"></span></h3>
+		<h3>gamma = <span id="gamma"></span></h3>
+		<h3>absolute = <span id="absolute"></span></h3>
+		<script>
+			function startOrientation(){
+				if(typeof DeviceMotionEvent.requestPermission==='function'){
+					DeviceOrientationEvent.requestPermission()
+					.then(function(response){
+						if(response=='granted'){
+							alert('Permission granted!');
+							window.addEventListener('deviceorientation',function(event){
+								alert(event.alpha);
+								alert(event.beta);
+								alert(event.gamma);
+							});
+						}
+						else{
+							alert('Access denied');
+						}
+					});
+				}
+				else { alert('Permission not needed')}
+			}
+		</script>
+	</body>
+</html>
+
+
