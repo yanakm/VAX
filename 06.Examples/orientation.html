@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html>
 	<head>
@@ -23,10 +23,11 @@
 						if(response=='granted'){
 							alert('Permission granted!');
 							window.addEventListener('deviceorientation',function(event){
-								alert(event.alpha);
-								alert(event.beta);
-								alert(event.gamma);
-							});
+								document.getElementById('alpha').innerHTML = event.alpha.toFixed(1);
+								document.getElementById('beta').innerHTML = event.beta.toFixed(1);
+								document.getElementById('gamma').innerHTML = event.gamma.toFixed(1);
+								document.getElementById('absolute').innerHTML = event.absolute.toFixed(1);
+							},true);
 						}
 						else{
 							alert('Access denied');
