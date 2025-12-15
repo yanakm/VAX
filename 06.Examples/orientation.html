@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>E0905: Ориентация на устройство</title>
+		<title>Позволение</title>
 		<meta charset="utf-8">
 		
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -19,6 +19,7 @@
 	
 	<body>
 		<button id="permissionButton" onClick="startOrientation()">Give Permission</button>
+
 		<h2>Orientation</h2>
 		<h3>alpha = <span id="alpha"></span></h3>
 		<h3>beta = <span id="beta"></span></h3>
@@ -45,7 +46,25 @@
 						if(response=='granted'){
 							DeviceMotionEvent.requestPermission()
 							.then(function(response2){
-								if(response2=='granted'){
+									alert('Permission granted!');
+									window.addEventListener("devicemotion", function(event){
+									document.getElementById('acceleration1').innerHTML = xyz(event.acceleration);
+									document.getElementById('acceleration2').innerHTML = xyz(event.accelerationIncludingGravity);
+									}, true);
+							})
+						}
+						else{
+							alert('Access denied');
+						}
+					});
+				}
+				else { alert('Permission not needed')}
+				if(typeof DeviceOrientationEvent.requestPermission=="function"){
+					DeviceOrientationEvent.requestPermission()
+					.then(function(response){
+						if(response=='granted'){
+							DeviceMotionEvent.requestPermission()
+							.then(function(response2){
 									alert('Permission granted!');
 									window.addEventListener('deviceorientation',function(event){
 									document.getElementById('alpha').innerHTML = event.alpha.toFixed(1);
@@ -53,14 +72,6 @@
 									document.getElementById('gamma').innerHTML = event.gamma.toFixed(1);
 									document.getElementById('absolute').innerHTML = event.absolute.toFixed(1);
 								},true);
-									window.addEventListener("devicemotion", function(event){
-									document.getElementById('acceleration1').innerHTML = xyz(event.acceleration);
-									document.getElementById('acceleration2').innerHTML = xyz(event.accelerationIncludingGravity);
-									}, true);
-								}
-								else{
-									alert('Access denied');
-								}
 							})
 						}
 						else{
@@ -72,12 +83,7 @@
 				else { alert('Permission not needed')}
 				document.getElementById("permissionButton").style.display="none";
 			}
-
 		</script>
 	</body>
 </html>
-
-
-
-
 
