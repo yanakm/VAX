@@ -44,14 +44,11 @@
 					DeviceOrientationEvent.requestPermission()
 					.then(function(response){
 						if(response=='granted'){
-							DeviceMotionEvent.requestPermission()
-							.then(function(response2){
-									alert('Permission granted!');
-									window.addEventListener("devicemotion", function(event){
-									document.getElementById('acceleration1').innerHTML = xyz(event.acceleration);
-									document.getElementById('acceleration2').innerHTML = xyz(event.accelerationIncludingGravity);
-									}, true);
-							})
+							alert('Permission granted!');
+							window.addEventListener("devicemotion", function(event){
+								document.getElementById('acceleration1').innerHTML = xyz(event.acceleration);
+								document.getElementById('acceleration2').innerHTML = xyz(event.accelerationIncludingGravity);
+							}, true);
 						}
 						else{
 							alert('Access denied');
@@ -63,22 +60,18 @@
 					DeviceOrientationEvent.requestPermission()
 					.then(function(response){
 						if(response=='granted'){
-							DeviceMotionEvent.requestPermission()
-							.then(function(response2){
-									alert('Permission granted!');
-									window.addEventListener('deviceorientation',function(event){
-									document.getElementById('alpha').innerHTML = event.alpha.toFixed(1);
-									document.getElementById('beta').innerHTML = event.beta.toFixed(1);
-									document.getElementById('gamma').innerHTML = event.gamma.toFixed(1);
-									document.getElementById('absolute').innerHTML = event.absolute.toFixed(1);
-								},true);
-							})
+							alert('Permission granted!');
+							window.addEventListener('deviceorientation',function(event){
+								document.getElementById('alpha').innerHTML = event.alpha.toFixed(1);
+								document.getElementById('beta').innerHTML = event.beta.toFixed(1);
+								document.getElementById('gamma').innerHTML = event.gamma.toFixed(1);
+								document.getElementById('absolute').innerHTML = event.absolute.toFixed(1);
+							},true);
 						}
 						else{
 							alert('Access denied');
 						}
-					});
-					
+					});	
 				}
 				else { alert('Permission not needed')}
 				document.getElementById("permissionButton").style.display="none";
@@ -86,4 +79,7 @@
 		</script>
 	</body>
 </html>
+
+
+
 
