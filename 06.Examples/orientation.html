@@ -51,7 +51,7 @@
 							.then(function(response2){
 								if(response2=='granted'){
 									alert('Permission granted!');
-									window.addEventListener('deviceorientation',function(event){
+									window.addEventListener('deviceorientationabsolute',function(event){
 									document.getElementById('alpha').innerHTML = event.alpha.toFixed(1);
 									document.getElementById('beta').innerHTML = event.beta.toFixed(1);
 									document.getElementById('gamma').innerHTML = event.gamma.toFixed(1);
@@ -80,6 +80,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
