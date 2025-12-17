@@ -189,10 +189,11 @@
 							window.addEventListener('deviceorientation',function(event){
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								//document.getElementById('alpha').innerHTML=alpha;
+								var bb = 180-Math.round(Math.abs(event.beta.toFixed(1)));
 								var b = Math.PI-Math.round(event.beta.toFixed(1))/180*Math.PI;
 								if(b>0 && b<Math.PI){
 									beta = b;
-									document.getElementById('beta').innerHTML= 180-Math.round(event.beta.toFixed(1));
+									document.getElementById('beta').innerHTML= bb;
 								}
 								updateCameraPosition();
 							},true);
@@ -217,6 +218,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
