@@ -190,7 +190,7 @@
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								//document.getElementById('alpha').innerHTML=alpha;
 								if(event.beta.toFixed()<180 ){
-									beta = -Math.round(event.beta.toFixed(1))/360*Math.PI;
+									beta = Math.PI-Math.round(event.beta.toFixed(1))/360*Math.PI;
 									//document.getElementById('beta').innerHTML=beta;
 								}
 								updateCameraPosition();
@@ -216,6 +216,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
