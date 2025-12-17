@@ -210,7 +210,7 @@
 								}
 								else if(window.orientation == -90)
 								{
-									var bb = 90-event.gamma;
+									var bb = event.gamma-90;
 									var b = bb/180*Math.PI;
 									//if(bb>0 && bb<180){
 									beta = b;
@@ -220,7 +220,7 @@
 								}
 								else if(window.orientation == 90)
 								{
-									var bb = 90-event.gamma;
+									var bb = event.gamma-90;
 									var b = bb/180*Math.PI;
 									//if(bb>0 && bb<180){
 									beta = b;
@@ -251,6 +251,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
