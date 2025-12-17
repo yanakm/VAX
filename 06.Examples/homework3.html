@@ -196,7 +196,7 @@
 								var bb = 180-event.beta;
 								var b = bb/180*Math.PI;
 								if(bb>0 && bb<180){
-									//beta = b;
+									beta = b;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
 								updateCameraPosition();
@@ -222,6 +222,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
