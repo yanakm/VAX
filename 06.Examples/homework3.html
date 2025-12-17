@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Домашно</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "vax": "https://boytchev.github.io/CourseVAX/lib/vax.js"
+			}
+		  }
+		</script>
+		<style>
+			#permission-button{
+				width: 60%;
+				height:20%;
+				background-color: rgba(1, 128, 41, 0.311);
+				border: none;
+				color: white;
+				font-size: large;
+				cursor: pointer;
+				box-shadow: 0px 0px 15px 1px white;
+			}
+			#permission-section{
+				z-index: 1;
+				position: fixed;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				top:35%;
+				left:30%;
+				width: 40vw;
+				height: 30vh;
+				background-color: rgba(22, 158, 1, 0.149);
+				backdrop-filter: blur(8px); 
+				border: 1px solid rgba(1, 128, 41, 0.59);
+				border-radius: 16px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="permission-section">
+		<button id="permission-button">Позволи</button>
+		</div>
+		<script type="module">
+		
+			import * as THREE from "three";
+			import * as VAX from "vax";
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+			VAX.init(animate);
+			VAX.camera.position.set(0,0,0);
+			//const controls = new OrbitControls( VAX.camera, VAX.renderer.domElement );
+		
+			VAX.light.intensity = 1;
+			//VAX.light.position.set(0,1,0);
+			//const ambLight = new THREE.AmbientLight( 0x404040 ); 
+			// /VAX.scene.add( ambLight );
+			const pointLight = new THREE.PointLight( 0xffffff, 4, 200,0);
+			pointLight.position.set( 0, 0, 0 );
+			VAX.scene.add( pointLight );
+
+			var side=100;
+			var boxSideGeo = new THREE.BoxGeometry(side,side,1);
+			var boxSideMaterial = new THREE.MeshStandardMaterial({color: "green"});
+			var boxSide = new THREE.Mesh(boxSideGeo,boxSideMaterial);
+			let offsets=[
+				{rot:[0,0,0],pos:[0,0,side/2]},
+				{rot:[0,0,0],pos:[0,0,-side/2]},
+				{rot:[Math.PI/2,0,0],pos:[0,side/2,0]},
+				{rot:[Math.PI/2,0,0],pos:[0,-side/2,0]},
+				{rot:[0,Math.PI/2,0],pos:[side/2,0,0]},
+				{rot:[0,Math.PI/2,0],pos:[-side/2,0,0]},
+
+			]
+			var cube = new THREE.Group();
+			for(var off of offsets){
+				var s = boxSide.clone();
+				s.rotation.set(off.rot[0],off.rot[1],off.rot[2]);
+				s.position.set(off.pos[0],off.pos[1],off.pos[2]);
+				cube.add(s);
+			}
+			VAX.scene.add(cube);
+
+			//конуси
+			var coneSize=10;
+			var coneR = coneSize/4;
+			var coneGeo = new THREE.ConeGeometry(coneR,coneSize,16,1);
+			var offset=coneSize/2;
+			for(var i=0; i<300; i++){
+				var mat = new THREE.MeshStandardMaterial({color: '#'+Math.floor(Math.random()*16777215).toString(16)})
+				var cone = new THREE.Mesh(coneGeo,mat);
+				var num = Math.floor(Math.random()*100)%6;
+				var x= THREE.MathUtils.randInt(-0.9*side/2,0.9*side/2);
+				var y= THREE.MathUtils.randInt(-0.9*side/2,0.9*side/2);
+				var xSign=Math.round(Math.sin(Math.random())*Math.cos(Math.random()))*2-1;
+				var ySign=Math.round(Math.sin(Math.random())*Math.cos(Math.random()))*2-1;
+				switch(num){
+					case 0: cone.position.set(x*xSign,y*ySign,side/2-offset); break;
+					case 1: cone.position.set(x*xSign,y*ySign,-side/2+offset); break;
+					case 2: cone.position.set(x*xSign,side/2-offset,y*ySign); break;
+					case 3: cone.position.set(x*xSign,-side/2+offset,y*ySign); break;
+					case 4: cone.position.set(side/2-offset,x*xSign,y*ySign); break;
+					case 5: cone.position.set(-side/2+offset,x*xSign,y*ySign); break;
+				}
+				cube.add(cone);
+			}
+
+			var x=0,y=0,z=0;
+			var alpha=0;
+			var beta=0;
+			var updateCameraPosition =()=>{
+				z=Math.cos(alpha)*Math.sin(beta);
+				x=Math.sin(alpha)*Math.sin(beta);
+				y=Math.cos(beta);
+				VAX.camera.lookAt(x,y,z);
+			}
+			window.addEventListener('keydown',(event)=>{
+				if(event.key=='ArrowDown'){
+					if(beta<Math.PI-0.2)
+					beta+=0.1;
+					updateCameraPosition();
+				}
+				if(event.key=='ArrowUp'){
+					if(beta>1)
+					beta-=0.1;
+					updateCameraPosition();
+				}
+				if(event.key=='ArrowLeft'){
+					alpha+=0.1;
+					updateCameraPosition();
+				}
+				if(event.key=='ArrowRight'){
+					alpha-=0.1;
+					updateCameraPosition();
+				}
+			})
+			
+
+			document.getElementById('permission-button').addEventListener('click',startOrientation)
+
+			//Позволения за ориентация и движение
+			function startOrientation(){
+				//Питаме за позволение за движението на устройството
+				if(typeof DeviceMotionEvent.requestPermission=='function'){
+					DeviceOrientationEvent.requestPermission()
+					.then(function(response){
+						if(response=='granted'){
+							alert('Permission granted!');
+							window.addEventListener("devicemotion", function(event){
+								//document.getElementById('acceleration1').innerHTML = xyz(event.acceleration);
+								//document.getElementById('acceleration2').innerHTML = xyz(event.accelerationIncludingGravity);
+							}, true);
+						}
+						else{
+							alert('Access denied');
+						}
+					});
+				}
+				else { alert('Permission not needed')}
+
+				//Питаме за позволение за ориентацията на устройството
+				if(typeof DeviceOrientationEvent.requestPermission=="function"){
+					DeviceOrientationEvent.requestPermission()
+					.then(function(response){
+						if(response=='granted'){
+							alert('Permission granted!');
+							window.addEventListener('deviceorientation',function(event){
+								alpha = event.gamma.toFixed(1);
+								if(event.beta.toFixed()<180 )beta = event.beta.toFixed(1);
+							},true);
+						}
+						else{
+							alert('Access denied');
+						}
+					});	
+				}
+				else { alert('Permission not needed')}
+
+				//Премахваме бутона
+				document.getElementById("permission-section").style.display="none";
+			}
+
+			function animate(t)
+			{
+				//controls.update();
+				//cube.rotation.set(0,t,0);
+			}
+			
+		</script>
+	</body>
+</html>
+
+
