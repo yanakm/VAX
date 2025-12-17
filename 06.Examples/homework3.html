@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 
 <html>
@@ -185,11 +187,11 @@
 						if(response=='granted'){
 							alert('Permission granted!');
 							window.addEventListener('deviceorientation',function(event){
-								//alpha = event.gamma.toFixed(1);
+								alpha = -Math.rouund(event.gamma.toFixed(1))/360*Math.PI;
 								//document.getElementById('alpha').innerHTML=alpha;
 								if(event.beta.toFixed()<180 ){
-									beta = Math.round(event.beta.toFixed(1))/360*Math.PI;
-									document.getElementById('beta').innerHTML=beta;
+									beta = -Math.round(event.beta.toFixed(1))/360*Math.PI;
+									//document.getElementById('beta').innerHTML=beta;
 								}
 								updateCameraPosition();
 							},true);
@@ -214,3 +216,5 @@
 		</script>
 	</body>
 </html>
+
+
