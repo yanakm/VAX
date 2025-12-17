@@ -189,9 +189,9 @@
 							window.addEventListener('deviceorientation',function(event){
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								//document.getElementById('alpha').innerHTML=alpha;
-								var bb = 90-event.beta.toFixed(1);
+								var bb = 180-event.beta.toFixed(1);
 								var b = bb/180*Math.PI;
-								if(b>0 && b<Math.PI){
+								if(bb>0 && bb<180){
 									beta = b;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
@@ -218,6 +218,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
