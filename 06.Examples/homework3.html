@@ -190,8 +190,8 @@
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								//document.getElementById('alpha').innerHTML=alpha;
 								if(event.beta.toFixed()<180 ){
-									beta = Math.PI-Math.round(event.beta.toFixed(1))/360*Math.PI;
-									//document.getElementById('beta').innerHTML=beta;
+									beta = Math.PI-Math.round(event.beta.toFixed(1))/180*Math.PI;
+									document.getElementById('beta').innerHTML= 180-Math.round(event.beta.toFixed(1));
 								}
 								updateCameraPosition();
 							},true);
@@ -216,6 +216,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
