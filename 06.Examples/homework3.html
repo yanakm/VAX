@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html>
 	<head>
@@ -42,6 +42,14 @@
 				border: 1px solid rgba(1, 128, 41, 0.59);
 				border-radius: 16px;
 			}
+			#debug{
+				position: fixed;
+				margin: 12px;
+				color:white;
+			}
+			#alpha #beta{
+				position: fixed;
+			}
 		</style>
 	</head>
 	
@@ -49,6 +57,10 @@
 		<div id="permission-section">
 		<button id="permission-button">Позволи</button>
 		</div>
+		<span id="debug">
+			<span id="alpha">0</span>
+			<span id="beta">0</span>
+		</span>
 		<script type="module">
 		
 			import * as THREE from "three";
@@ -174,7 +186,11 @@
 							alert('Permission granted!');
 							window.addEventListener('deviceorientation',function(event){
 								alpha = event.gamma.toFixed(1);
-								if(event.beta.toFixed()<180 )beta = event.beta.toFixed(1);
+								document.getElementById('alpha').innerHTML=alpha;
+								if(event.beta.toFixed()<180 ){
+									beta = event.beta.toFixed(1);
+									document.getElementById('beta').innerHTML=beta;
+								}
 							},true);
 						}
 						else{
