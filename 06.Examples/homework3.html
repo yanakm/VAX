@@ -193,36 +193,36 @@
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								document.getElementById('alpha').innerHTML=aa;
 
-								UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 
-								if(orientation == 0) //Default orientation 
+
+								if(window.orientation == 0) //Default orientation 
 								{
 									var bb = 180-event.beta;
-								var b = bb/180*Math.PI;
-								if(bb>0 && bb<180){
+									var b = bb/180*Math.PI;
+									if(bb>0 && bb<180){
 									beta = b;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
 								}
-								else if(orientation == UIInterfaceOrientationPortrait)
+								else if(window.orientation == 180)
 								{
 									
 								}
-								else if(orientation == UIInterfaceOrientationLandscapeLeft)
+								else if(window.orientation == -90)
 								{
 									var bb = 180-event.gamma;
-								var b = bb/180*Math.PI;
-								if(bb>0 && bb<180){
+									var b = bb/180*Math.PI;
+									if(bb>0 && bb<180){
 									beta = b;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
 									
 								}
-								else if(orientation == UIInterfaceOrientationLandscapeRight)
+								else if(window.orientation == 90)
 								{
 									var bb = 180-event.gamma;
-								var b = bb/180*Math.PI;
-								if(bb>0 && bb<180){
+									var b = bb/180*Math.PI;
+									if(bb>0 && bb<180){
 									beta = b;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
@@ -251,6 +251,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
