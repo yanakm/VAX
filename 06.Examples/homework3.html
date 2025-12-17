@@ -193,7 +193,7 @@
 								var b = Math.PI-Math.round(event.beta.toFixed(1))/180*Math.PI;
 								if(b>0 && b<Math.PI){
 									beta = b;
-									document.getElementById('beta').innerHTML= bb;
+									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
 								updateCameraPosition();
 							},true);
@@ -218,6 +218,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
