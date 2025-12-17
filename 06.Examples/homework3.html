@@ -188,10 +188,10 @@
 							alert('Permission granted!');
 							window.addEventListener('deviceorientation',function(event){
 								var aa = event.gamma;
-								var a = aa/180*Math.PI;
+								var a = aa/360*Math.PI;
 								alpha=a;
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
-								//document.getElementById('alpha').innerHTML=alpha;
+								document.getElementById('alpha').innerHTML=aa;
 								
 								var bb = 180-event.beta;
 								var b = bb/180*Math.PI;
@@ -222,6 +222,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
