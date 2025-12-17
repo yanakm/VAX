@@ -187,8 +187,8 @@
 						if(response=='granted'){
 							alert('Permission granted!');
 							window.addEventListener('deviceorientation',function(event){
-								var aa = event.gamma;
-								var a = aa/360*Math.PI;
+								var aa = event.alpha;
+								var a = aa/180*Math.PI;
 								alpha=a;
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								document.getElementById('alpha').innerHTML=aa;
@@ -222,6 +222,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
