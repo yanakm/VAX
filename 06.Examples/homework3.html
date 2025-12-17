@@ -187,13 +187,16 @@
 						if(response=='granted'){
 							alert('Permission granted!');
 							window.addEventListener('deviceorientation',function(event){
+								var aa = event.gamma;
+								var a = aa/180*Math.PI;
+								alpha=a;
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								//document.getElementById('alpha').innerHTML=alpha;
 								
 								var bb = 180-event.beta;
 								var b = bb/180*Math.PI;
 								if(bb>0 && bb<180){
-									beta = b;
+									//beta = b;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
 								updateCameraPosition();
@@ -219,6 +222,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
