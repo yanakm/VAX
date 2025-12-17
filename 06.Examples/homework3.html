@@ -189,10 +189,17 @@
 							window.addEventListener('deviceorientation',function(event){
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								//document.getElementById('alpha').innerHTML=alpha;
-								var bb = 180-event.beta;
-								var b = bb/180*Math.PI;
+								const beta0  = event.beta  * Math.PI / 180;
+    							const gamma0 = evenet.gamma * Math.PI / 180;
+							    pitch = Math.atan2(
+							        Math.sin(beta0),
+							        Math.cos(beta0) * Math.cos(gamma0)
+							    );
+
+								//var bb = 180-event.beta;
+								//var b = bb/180*Math.PI;
 								if(bb>0 && bb<180){
-									beta = b;
+									beta = pitch;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 								}
 								updateCameraPosition();
@@ -218,6 +225,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
