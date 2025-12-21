@@ -232,7 +232,7 @@
 					.then(function(response){
 						if(response=='granted'){
 							alert('Permission granted!');
-							window.addEventListener('deviceorientation',getAngles,true);
+							window.addEventListener('deviceorientation',getAngles(),true);
 						}
 						else{
 							alert('Access denied');
@@ -254,6 +254,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
