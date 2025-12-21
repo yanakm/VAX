@@ -206,6 +206,7 @@
 			  noSleep.enable();
 			  document.removeEventListener('touchstart', enableNoSleep, false);
 			}
+			document.addEventListener('touchstart', enableNoSleep, false);
 			
 
 			//Позволения за ориентация и движение
@@ -241,5 +242,6 @@
 		</script>
 	</body>
 </html>
+
 
 
