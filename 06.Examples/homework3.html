@@ -96,11 +96,11 @@
 			VAX.scene.add(cube);
 
 			//Конуси
-			var coneSize=100;
+			var coneSize=50;
 			var coneR = coneSize/4;
 			var coneGeo = new THREE.ConeGeometry(coneR,coneSize,16,1);
 			var offset=coneSize/2;
-			for(var i=0; i<300; i++){
+			for(var i=0; i<500; i++){
 				var mat = new THREE.MeshStandardMaterial({color: '#'+Math.floor(Math.random()*16777215).toString(16)})
 				var cone = new THREE.Mesh(coneGeo,mat);
 				var num = Math.floor(Math.random()*100)%6;
@@ -243,6 +243,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
