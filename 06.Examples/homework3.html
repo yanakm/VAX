@@ -160,53 +160,28 @@
 
 			document.getElementById('permission-button').addEventListener('click',startOrientation)
 
-			//Позволения за ориентация и движение
-			function startOrientation(){
-				//Питаме за позволение за движението на устройството
-				if(typeof DeviceMotionEvent.requestPermission=='function'){
-					DeviceOrientationEvent.requestPermission()
-					.then(function(response){
-						if(response=='granted'){
-							alert('Permission granted!');
-							window.addEventListener("devicemotion", function(event){
-								//document.getElementById('acceleration1').innerHTML = xyz(event.acceleration);
-								//document.getElementById('acceleration2').innerHTML = xyz(event.accelerationIncludingGravity);
-							}, true);
-						}
-						else{
-							alert('Access denied');
-						}
-					});
-				}
-				else { alert('Permission not needed')}
-
-				//Питаме за позволение за ориентацията на устройството
-				if(typeof DeviceOrientationEvent.requestPermission=="function"){
-					DeviceOrientationEvent.requestPermission()
-					.then(function(response){
-						if(response=='granted'){
-							alert('Permission granted!');
-							window.addEventListener('deviceorientation',function(event){
+			function getAngles=(event)=>{
+								//Взимаме информация за алфа 
 								var aa =Math.round(event.alpha);
-						
-								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
-								document.getElementById('alpha').innerHTML=aa;
+								//Debug:
+								//document.getElementById('alpha').innerHTML=aa;
 
-
-
-								if(window.orientation == 0) //Default orientation 
+								//Ориентация по подразбиране -> изправен вертикално телефон
+								//Не е предназначен за очила, но се движи 
+								if(window.orientation == 0)
 								{
 									var bb = 180-event.beta;
 									var b = bb/180*Math.PI;
 									if(bb>0 && bb<180){
 									beta = b;
 									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
+									}
 								}
-								}
+								//Обърнат наобратно вертикален телефон->не правим нищо
 								else if(window.orientation == 180)
 								{
-									
 								}
+								//Хоризонтално обърнат телефон -> горна част надясно 
 								else if(window.orientation == 90)
 								{
 									var bb = event.gamma
@@ -226,6 +201,7 @@
 									}
 									
 								}
+								//Хоризонтално обърнат 
 								else if(window.orientation == -90)
 								{
 									var bb = event.gamma
@@ -246,7 +222,17 @@
 								}
 								
 								updateCameraPosition();
-							},true);
+							}
+
+			//Позволения за ориентация и движение
+			function startOrientation(){
+				//Питаме за позволение за ориентацията на устройството
+				if(typeof DeviceOrientationEvent.requestPermission=="function"){
+					DeviceOrientationEvent.requestPermission()
+					.then(function(response){
+						if(response=='granted'){
+							alert('Permission granted!');
+							window.addEventListener('deviceorientation',getAngles,true);
 						}
 						else{
 							alert('Access denied');
@@ -268,6 +254,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
