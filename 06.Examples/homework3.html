@@ -96,7 +96,7 @@
 			VAX.scene.add(cube);
 
 			//Конуси
-			var coneSize=50;
+			var coneSize=75;
 			var coneR = coneSize/4;
 			var coneGeo = new THREE.ConeGeometry(coneR,coneSize,16,1);
 			var offset=coneSize/2;
@@ -159,12 +159,11 @@
 					var aa =Math.round(event.alpha);
 					//Ориентация по подразбиране -> изправен вертикално телефон
 					//Не е предназначен за очила, но се движи 
-					if(window.orientation == 180){
+					if(window.orientation == 180 || window.orientation == 0){
 						var bb = 180-event.beta;
 						var b = bb/180*Math.PI;
 						if(bb>0 && bb<180){
 							beta = b;
-							document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 						}
 						alpha=aa/180*Math.PI;
 					}
@@ -243,6 +242,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
