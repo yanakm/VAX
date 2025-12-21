@@ -161,68 +161,62 @@
 			document.getElementById('permission-button').addEventListener('click',startOrientation)
 
 			function getAngles(event){
-								//Взимаме информация за алфа 
-								var aa =Math.round(event.alpha);
-								//Debug:
-								//document.getElementById('alpha').innerHTML=aa;
+					//Взимаме информация за алфа 
+					var aa =Math.round(event.alpha);
+					//Debug:
+					//document.getElementById('alpha').innerHTML=aa;
 
-								//Ориентация по подразбиране -> изправен вертикално телефон
-								//Не е предназначен за очила, но се движи 
-								if(window.orientation == 0)
-								{
-									var bb = 180-event.beta;
-									var b = bb/180*Math.PI;
-									if(bb>0 && bb<180){
-									beta = b;
-									document.getElementById('beta').innerHTML= event.beta.toFixed(1);
-									}
-								}
-								//Обърнат наобратно вертикален телефон->не правим нищо
-								else if(window.orientation == 180)
-								{
-								}
-								//Хоризонтално обърнат телефон -> горна част надясно 
-								else if(window.orientation == 90)
-								{
-									var bb = event.gamma
-									if(bb<0 && bb>=-90){
-										var b = (180-Math.abs(bb))/180*Math.PI;
-										beta = b;
-										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
-										var a = aa/180*Math.PI;
-										alpha=a;
-									}
-									else if(bb>=0 && bb<=90){
-										var b = Math.abs(bb)/180*Math.PI;
-										beta = b;
-										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
-										var a = (aa-180)/180*Math.PI;
-										alpha=a;
-									}
-									
-								}
-								//Хоризонтално обърнат 
-								else if(window.orientation == -90)
-								{
-									var bb = event.gamma
-									if(bb<=0 && bb>=-90){
-										var b = (180-Math.abs(bb))/180*Math.PI;
-										beta = Math.PI-b;
-										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
-										var a = aa/180*Math.PI;
-										alpha=a;
-									}
-									else if(bb>=0 && bb<=90){
-										var b = Math.abs(bb)/180*Math.PI;
-										beta = Math.PI-b;
-										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
-										var a = (aa-180)/180*Math.PI;
-										alpha=a;
-									}
-								}
+					//Ориентация по подразбиране -> изправен вертикално телефон
+					//Не е предназначен за очила, но се движи 
+					if(window.orientation == 0){
+						var bb = 180-event.beta;
+						var b = bb/180*Math.PI;
+						if(bb>0 && bb<180){
+							beta = b;
+							document.getElementById('beta').innerHTML= event.beta.toFixed(1);
+						}
+					}
+					//Обърнат наобратно вертикален телефон->не правим нищо
+					if(window.orientation == 180){}
+					//Хоризонтално обърнат телефон -> горна част надясно 
+					if(window.orientation == 90){
+						var bb = event.gamma
+						if(bb<0 && bb>=-90){
+							var b = (180-Math.abs(bb))/180*Math.PI;
+							beta = b;
+							document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+							var a = aa/180*Math.PI;
+							alpha=a;
+						}
+						else if(bb>=0 && bb<=90){
+							var b = Math.abs(bb)/180*Math.PI;
+							beta = b;
+							document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+							var a = (aa-180)/180*Math.PI;
+							alpha=a;
+						}
+					}
+					//Хоризонтално обърнат 
+					if(window.orientation == -90){
+					var bb = event.gamma
+						if(bb<=0 && bb>=-90){
+						var b = (180-Math.abs(bb))/180*Math.PI;
+						beta = Math.PI-b;
+						document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+						var a = aa/180*Math.PI;
+						alpha=a;
+					}
+					else if(bb>=0 && bb<=90){
+						var b = Math.abs(bb)/180*Math.PI;
+						beta = Math.PI-b;
+						document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+						var a = (aa-180)/180*Math.PI;
+						alpha=a;
+					}
+				}
 								
-								updateCameraPosition();
-							}
+				updateCameraPosition();
+			}
 
 			//Позволения за ориентация и движение
 			function startOrientation(){
@@ -232,7 +226,7 @@
 					.then(function(response){
 						if(response=='granted'){
 							alert('Permission granted!');
-							window.addEventListener('deviceorientation',getAngles(),true);
+							window.addEventListener('deviceorientation',getAngles(event),true);
 						}
 						else{
 							alert('Access denied');
