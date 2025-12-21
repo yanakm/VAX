@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Домашно</title>
+		<title>Конуси в куб</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		
@@ -40,14 +40,6 @@
 				backdrop-filter: blur(8px); 
 				border: 1px solid rgba(1, 128, 41, 0.59);
 				border-radius: 16px;
-			}
-			#debug{
-				position: fixed;
-				margin: 12px;
-				color:white;
-			}
-			#alpha #beta{
-				position: fixed;
 			}
 		</style>
 	</head>
@@ -151,6 +143,7 @@
 				updateCameraPosition();
 			})
 			
+			//Позволението трябва да се получи чрез бутон
 			document.getElementById('permission-button').addEventListener('click',startOrientation)
 
 			//Взимане на ъглите и преместване на камерата
@@ -189,7 +182,7 @@
 							beta = Math.PI-(180-Math.abs(bb))/180*Math.PI;
 							alpha= aa/180*Math.PI;
 						}
-						//Севрно полукълбо
+						//Северно полукълбо
 						else if(bb>=0 && bb<=90){
 							beta = Math.PI-Math.abs(bb)/180*Math.PI;
 							alpha= (aa-180)/180*Math.PI;
@@ -209,7 +202,6 @@
 			document.addEventListener('touchstart', enableNoSleep, false);
 			
 
-			//Позволения за ориентация и движение
 			function startOrientation(){
 				//Питаме за позволение за ориентацията на устройството
 				if(typeof DeviceOrientationEvent.requestPermission=="function"){
@@ -217,6 +209,7 @@
 					DeviceOrientationEvent.requestPermission()
 					.then(function(response){
 						if(response=='granted'){
+							alert('Permission granted')
 							window.addEventListener('deviceorientation',getAngles,true);
 							enableNoSleep()
 						}
@@ -242,9 +235,6 @@
 		</script>
 	</body>
 </html>
-
-
-
 
 
 
