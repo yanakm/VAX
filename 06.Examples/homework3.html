@@ -172,7 +172,7 @@
 					if(window.orientation == 90){
 						var bb = event.gamma;
 						var delta  = Math.abs(beta/Math.PI*180 - bb);
-						if(beta!=0 && delta > 10) return;
+						//if(beta!=0 && delta > 10) return;
 						//Северно полукълбо
 						if(bb<0 && bb>=-90){
 							beta = (180-Math.abs(bb))/180*Math.PI;
@@ -188,7 +188,7 @@
 					if(window.orientation == -90){
 						var bb = event.gamma;
 						var delta  = Math.abs(beta/Math.PI*180 - bb);
-						if(beta!=0 && delta > 10) return;
+						//if(beta!=0 && delta > 10) return;
 						//Южно полукълбо
 						if(bb<=0 && bb>=-90){
 							beta = Math.PI-(180-Math.abs(bb))/180*Math.PI;
@@ -247,6 +247,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
