@@ -212,7 +212,7 @@
 								{
 									var bb = event.gamma
 									if(bb<0 && bb>=-90){
-										var b = (90+Math.abs(bb))/180*Math.PI;
+										var b = (180-Math.abs(bb))/180*Math.PI;
 										beta = b;
 									document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
 									}
@@ -227,7 +227,7 @@
 								{
 									var bb = event.gamma
 									if(bb<=0 && bb>=-90){
-										var b = (90+Math.abs(bb))/180*Math.PI;
+										var b = (180-Math.abs(bb))/180*Math.PI;
 										beta = b;
 										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
 									}
