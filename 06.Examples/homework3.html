@@ -171,7 +171,7 @@
 					//Хоризонтално обърнат телефон -> горна част надясно 
 					if(window.orientation == 90){
 						var bb = event.gamma;
-						var delta  = abs(beta - bb/180*Math.PI);
+						var delta  = abs(beta/Math.PI*180 - bb);
 						if(delta > 5) return;
 						//Северно полукълбо
 						if(bb<0 && bb>=-90){
@@ -187,7 +187,7 @@
 					//Хоризонтално обърнат телефон -> горна част наляво
 					if(window.orientation == -90){
 						var bb = event.gamma;
-						var delta  = abs(beta - bb/180*Math.PI);
+						var delta  = abs(beta/Math.PI*180 - bb);
 						if(delta > 5) return;
 						//Южно полукълбо
 						if(bb<=0 && bb>=-90){
@@ -247,6 +247,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
