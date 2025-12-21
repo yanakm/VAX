@@ -55,10 +55,6 @@
 		<div id="permission-section">
 		<button id="permission-button">Позволи</button>
 		</div>
-		<span id="debug">
-			<span id="alpha">0</span>
-			<span id="beta">0</span>
-		</span>
 		<script type="module">
 		
 			import * as THREE from "three";
@@ -140,21 +136,18 @@
 				if(event.key=='ArrowDown'){
 					if(beta<Math.PI-0.2)
 					beta+=0.1;
-					updateCameraPosition();
 				}
 				if(event.key=='ArrowUp'){
 					if(beta>1)
 					beta-=0.1;
-					updateCameraPosition();
 				}
 				if(event.key=='ArrowLeft'){
 					alpha+=0.1;
-					updateCameraPosition();
 				}
 				if(event.key=='ArrowRight'){
 					alpha-=0.1;
-					updateCameraPosition();
 				}
+				updateCameraPosition();
 			})
 			
 			document.getElementById('permission-button').addEventListener('click',startOrientation)
@@ -173,55 +166,55 @@
 							document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 						}
 					}
-					//Обърнат наобратно вертикален телефон->не правим нищо
-					if(window.orientation == 180){}
 					//Хоризонтално обърнат телефон -> горна част надясно 
 					if(window.orientation == 90){
-						var bb = event.gamma
+						var bb = event.gamma;
 						//Северно полукълбо
 						if(bb<0 && bb>=-90){
-							//Beta
-							var b = (180-Math.abs(bb))/180*Math.PI;
-							beta = b;
-							//Alpha
-							var a = aa/180*Math.PI;
-							alpha=a;
+							beta = (180-Math.abs(bb))/180*Math.PI;
+							alpha=aa/180*Math.PI;
 						}
 						//Южно полукълбо
 						else if(bb>=0 && bb<=90){
-							//Beta
-							var b = Math.abs(bb)/180*Math.PI;
-							beta = b;
-							//Alpha
-							var a = (aa-180)/180*Math.PI;
-							alpha=a;
+							beta = Math.abs(bb)/180*Math.PI;
+							alpha= (aa-180)/180*Math.PI;
 						}
 					}
 					//Хоризонтално обърнат телефон -> горна част наляво
 					if(window.orientation == -90){
-						var bb = event.gamma
+						var bb = event.gamma;
 						//Южно полукълбо
 						if(bb<=0 && bb>=-90){
-							//beta
-							var b = (180-Math.abs(bb))/180*Math.PI;
-							beta = Math.PI-b;
-							//alpha
-							var a = aa/180*Math.PI;
-							alpha=a;
+							beta = Math.PI-(180-Math.abs(bb))/180*Math.PI;
+							alpha= aa/180*Math.PI;
 						}
 						//Севрно полукълбо
 						else if(bb>=0 && bb<=90){
-							//beta
-							var b = Math.abs(bb)/180*Math.PI;
-							beta = Math.PI-b;
-							//alpha
-							var a = (aa-180)/180*Math.PI;
-							alpha=a;
+							beta = Math.PI-Math.abs(bb)/180*Math.PI;
+							alpha= (aa-180)/180*Math.PI;
 						}
 					}
 								
 				updateCameraPosition();
 			}
+
+			//Не позволяваме заспиване на телефона
+			//Код взет от:
+			//https://mikevdv.dev/blog/2022-06-23-stop-the-screen-going-to-sleep-with-javascript
+			let wakelock;
+			async function lockWakeState() {
+			if(!canWakeLock()) return;
+			try {
+				wakelock = await navigator.wakeLock.request();
+				wakelock.addEventListener('release', () => {
+				console.log('Screen Wake State Locked:', !wakelock.released);
+				});
+				console.log('Screen Wake State Locked:', !wakelock.released);
+			} catch(e) {
+				console.error('Failed to lock wake state with reason:', e.message);
+			}
+			}
+			await lockWakeState();
 
 			//Позволения за ориентация и движение
 			function startOrientation(){
@@ -231,7 +224,6 @@
 					DeviceOrientationEvent.requestPermission()
 					.then(function(response){
 						if(response=='granted'){
-							alert('Permission granted!');
 							window.addEventListener('deviceorientation',getAngles,true);
 						}
 						else{
@@ -240,7 +232,7 @@
 					});	
 				}
 				else {
-					//Androind
+					//Android
 					alert('Permission not needed')
 					window.addEventListener('deviceorientation',getAngles,true);
 				}
@@ -255,58 +247,3 @@
 		</script>
 	</body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
