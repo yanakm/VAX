@@ -231,14 +231,14 @@
 									var bb = event.gamma
 									if(bb<=0 && bb>=-90){
 										var b = (180-Math.abs(bb))/180*Math.PI;
-										beta = b;
+										beta = Math.PI-b;
 										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
 										var a = aa/180*Math.PI;
 										alpha=a;
 									}
 									else if(bb>=0 && bb<=90){
 										var b = Math.abs(bb)/180*Math.PI;
-										beta = b;
+										beta = Math.PI-b;
 										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
 										var a = (aa-180)/180*Math.PI;
 										alpha=a;
@@ -268,6 +268,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
