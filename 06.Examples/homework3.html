@@ -159,7 +159,7 @@
 					var aa =Math.round(event.alpha);
 					//Ориентация по подразбиране -> изправен вертикално телефон
 					//Не е предназначен за очила, но се движи 
-					if(window.orientation == 0){
+					if(window.orientation == 180){
 						var bb = 180-event.beta;
 						var b = bb/180*Math.PI;
 						if(bb>0 && bb<180){
@@ -247,6 +247,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
