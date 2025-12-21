@@ -201,18 +201,10 @@
 			//Не позволяваме заспиване на телефона
 			//Код взет от:
 			//https://mikevdv.dev/blog/2022-06-23-stop-the-screen-going-to-sleep-with-javascript
-			let wakelock;
-			async function lockWakeState() {
-			if(!canWakeLock()) return;
-			try {
-				wakelock = await navigator.wakeLock.request();
-				wakelock.addEventListener('release', () => {
-				console.log('Screen Wake State Locked:', !wakelock.released);
-				});
-				console.log('Screen Wake State Locked:', !wakelock.released);
-			} catch(e) {
-				console.error('Failed to lock wake state with reason:', e.message);
-			}
+			var noSleep = new NoSleep();
+			function enableNoSleep() {
+			  noSleep.enable();
+			  document.removeEventListener('touchstart', enableNoSleep, false);
 			}
 			
 
@@ -225,7 +217,7 @@
 					.then(function(response){
 						if(response=='granted'){
 							window.addEventListener('deviceorientation',getAngles,true);
-							await lockWakeState();
+							enableNoSleep()
 						}
 						else{
 							alert('Access denied');
@@ -236,7 +228,7 @@
 					//Android
 					alert('Permission not needed')
 					window.addEventListener('deviceorientation',getAngles,true);
-					await lockWakeState();
+					enableNoSleep()
 				}
 				//Премахваме бутона
 				document.getElementById("permission-section").style.display="none";
@@ -249,4 +241,5 @@
 		</script>
 	</body>
 </html>
+
 
