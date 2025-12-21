@@ -188,8 +188,7 @@
 							alert('Permission granted!');
 							window.addEventListener('deviceorientation',function(event){
 								var aa =Math.round(event.alpha);
-								var a = aa/180*Math.PI;
-								alpha=a;
+						
 								//alpha = -Math.round(event.gamma.toFixed(1))/360*Math.PI;
 								document.getElementById('alpha').innerHTML=aa;
 
@@ -214,12 +213,16 @@
 									if(bb<0 && bb>=-90){
 										var b = (180-Math.abs(bb))/180*Math.PI;
 										beta = b;
-									document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+										var a = aa/180*Math.PI;
+										alpha=a;
 									}
 									else if(bb>=0 && bb<=90){
 										var b = Math.abs(bb)/180*Math.PI;
 										beta = b;
 										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+										var a = (aa-180)/180*Math.PI;
+										alpha=a;
 									}
 									
 								}
@@ -230,11 +233,15 @@
 										var b = (180-Math.abs(bb))/180*Math.PI;
 										beta = b;
 										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+										var a = aa/180*Math.PI;
+										alpha=a;
 									}
 									else if(bb>=0 && bb<=90){
 										var b = Math.abs(bb)/180*Math.PI;
 										beta = b;
 										document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+										var a = (aa-180)/180*Math.PI;
+										alpha=a;
 									}
 								}
 								
@@ -261,6 +268,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
