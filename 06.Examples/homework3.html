@@ -1,12 +1,8 @@
-
-
 <!DOCTYPE html>
-
 <html>
 	<head>
 		<title>Домашно</title>
 		<meta charset="utf-8">
-		
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		
 		<script type="importmap">
@@ -69,18 +65,17 @@
 			import * as VAX from "vax";
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+			//С кръстосано гледане работи с очилата
 			VAX.initParallax(animate,-1);
+			//Поставяме камерата в центъра на куба
 			VAX.camera.position.set(0,0,0);
-			//const controls = new OrbitControls( VAX.camera, VAX.renderer.domElement );
-		
+			//Светлини
 			VAX.light.intensity = 1;
-			//VAX.light.position.set(0,1,0);
-			//const ambLight = new THREE.AmbientLight( 0x404040 ); 
-			// /VAX.scene.add( ambLight );
 			const pointLight = new THREE.PointLight( 0xffffff, 4, 2000,0);
 			pointLight.position.set( 0, 0, 0 );
 			VAX.scene.add( pointLight );
 
+			//Куб
 			var side=1000;
 			var boxSideGeo = new THREE.BoxGeometry(side,side,1);
 			var boxSideMaterial = new THREE.MeshStandardMaterial({color: "green"});
@@ -103,7 +98,7 @@
 			}
 			VAX.scene.add(cube);
 
-			//конуси
+			//Конуси
 			var coneSize=100;
 			var coneR = coneSize/4;
 			var coneGeo = new THREE.ConeGeometry(coneR,coneSize,16,1);
@@ -127,15 +122,20 @@
 				cube.add(cone);
 			}
 
+			//Следим накъде гледа камерата
 			var x=0,y=0,z=0;
 			var alpha=0;
 			var beta=0;
+
+			//От сферични координати преминаваме в декартови
 			var updateCameraPosition =()=>{
 				z=Math.cos(alpha)*Math.sin(beta);
 				x=Math.sin(alpha)*Math.sin(beta);
 				y=Math.cos(beta);
 				VAX.camera.lookAt(x,y,z);
 			}
+
+			//Контроли за компютър
 			window.addEventListener('keydown',(event)=>{
 				if(event.key=='ArrowDown'){
 					if(beta<Math.PI-0.2)
@@ -157,15 +157,12 @@
 				}
 			})
 			
-
 			document.getElementById('permission-button').addEventListener('click',startOrientation)
 
+			//Взимане на ъглите и преместване на камерата
 			function getAngles(event){
 					//Взимаме информация за алфа 
 					var aa =Math.round(event.alpha);
-					//Debug:
-					//document.getElementById('alpha').innerHTML=aa;
-
 					//Ориентация по подразбиране -> изправен вертикално телефон
 					//Не е предназначен за очила, но се движи 
 					if(window.orientation == 0){
@@ -181,39 +178,47 @@
 					//Хоризонтално обърнат телефон -> горна част надясно 
 					if(window.orientation == 90){
 						var bb = event.gamma
+						//Северно полукълбо
 						if(bb<0 && bb>=-90){
+							//Beta
 							var b = (180-Math.abs(bb))/180*Math.PI;
 							beta = b;
-							document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+							//Alpha
 							var a = aa/180*Math.PI;
 							alpha=a;
 						}
+						//Южно полукълбо
 						else if(bb>=0 && bb<=90){
+							//Beta
 							var b = Math.abs(bb)/180*Math.PI;
 							beta = b;
-							document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
+							//Alpha
 							var a = (aa-180)/180*Math.PI;
 							alpha=a;
 						}
 					}
-					//Хоризонтално обърнат 
+					//Хоризонтално обърнат телефон -> горна част наляво
 					if(window.orientation == -90){
-					var bb = event.gamma
+						var bb = event.gamma
+						//Южно полукълбо
 						if(bb<=0 && bb>=-90){
-						var b = (180-Math.abs(bb))/180*Math.PI;
-						beta = Math.PI-b;
-						document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
-						var a = aa/180*Math.PI;
-						alpha=a;
+							//beta
+							var b = (180-Math.abs(bb))/180*Math.PI;
+							beta = Math.PI-b;
+							//alpha
+							var a = aa/180*Math.PI;
+							alpha=a;
+						}
+						//Севрно полукълбо
+						else if(bb>=0 && bb<=90){\
+							//beta
+							var b = Math.abs(bb)/180*Math.PI;
+							beta = Math.PI-b;
+							//alpha
+							var a = (aa-180)/180*Math.PI;
+							alpha=a;
+						}
 					}
-					else if(bb>=0 && bb<=90){
-						var b = Math.abs(bb)/180*Math.PI;
-						beta = Math.PI-b;
-						document.getElementById('beta').innerHTML= event.gamma.toFixed(1);
-						var a = (aa-180)/180*Math.PI;
-						alpha=a;
-					}
-				}
 								
 				updateCameraPosition();
 			}
@@ -222,6 +227,7 @@
 			function startOrientation(){
 				//Питаме за позволение за ориентацията на устройството
 				if(typeof DeviceOrientationEvent.requestPermission=="function"){
+					//IOS
 					DeviceOrientationEvent.requestPermission()
 					.then(function(response){
 						if(response=='granted'){
@@ -233,24 +239,23 @@
 						}
 					});	
 				}
-				else { 
+				else {
+					//Androind
 					alert('Permission not needed')
 					window.addEventListener('deviceorientation',getAngles,true);
 				}
-
 				//Премахваме бутона
 				document.getElementById("permission-section").style.display="none";
 			}
 
 			function animate(t)
 			{
-				//controls.update();
-				//cube.rotation.set(0,t,0);
 			}
 			
 		</script>
 	</body>
 </html>
+
 
 
 
