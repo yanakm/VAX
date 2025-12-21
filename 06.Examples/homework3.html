@@ -166,10 +166,13 @@
 							beta = b;
 							document.getElementById('beta').innerHTML= event.beta.toFixed(1);
 						}
+						alpha=aa/180*Math.PI;
 					}
 					//Хоризонтално обърнат телефон -> горна част надясно 
 					if(window.orientation == 90){
 						var bb = event.gamma;
+						var delta  = abs(beta - bb/180*Math.PI);
+						if(delta > 5) return;
 						//Северно полукълбо
 						if(bb<0 && bb>=-90){
 							beta = (180-Math.abs(bb))/180*Math.PI;
@@ -184,6 +187,8 @@
 					//Хоризонтално обърнат телефон -> горна част наляво
 					if(window.orientation == -90){
 						var bb = event.gamma;
+						var delta  = abs(beta - bb/180*Math.PI);
+						if(delta > 5) return;
 						//Южно полукълбо
 						if(bb<=0 && bb>=-90){
 							beta = Math.PI-(180-Math.abs(bb))/180*Math.PI;
@@ -199,14 +204,13 @@
 				updateCameraPosition();
 			}
 
-			//Не позволяваме заспиване на телефона
-			//Код взет от:
-			//https://mikevdv.dev/blog/2022-06-23-stop-the-screen-going-to-sleep-with-javascript
+			//Не позволяваме заспиване на телефона -> библиотека NoSleep.min.js
 			var noSleep = new NoSleep();
 			function enableNoSleep() {
 			  noSleep.enable();
 			  document.removeEventListener('touchstart', enableNoSleep, false);
 			}
+			//Задейства се с докосване на екрана
 			document.addEventListener('touchstart', enableNoSleep, false);
 			
 
@@ -243,6 +247,7 @@
 		</script>
 	</body>
 </html>
+
 
 
 
