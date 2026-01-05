@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Конуси в куб</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script type="importmap">
+		  {
+			"imports": {
+			  "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+			  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+			  "vax": "https://boytchev.github.io/CourseVAX/lib/vax.js"
+			}
+		  }
+		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/nosleep/0.12.0/NoSleep.min.js"></script>
+		<style>
+			#permission-button{
+				width: 60%;
+				height:20%;
+				background-color: rgba(1, 128, 41, 0.311);
+				border: none;
+				color: white;
+				font-size: large;
+				cursor: pointer;
+				box-shadow: 0px 0px 15px 1px white;
+			}
+			#permission-section{
+				z-index: 1;
+				position: fixed;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				top:35%;
+				left:30%;
+				width: 40vw;
+				height: 30vh;
+				background-color: rgba(22, 158, 1, 0.149);
+				backdrop-filter: blur(8px); 
+				border: 1px solid rgba(1, 128, 41, 0.59);
+				border-radius: 16px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="permission-section">
+		<button id="permission-button">Позволи</button>
+		</div>
+		<script type="module">
+		
+			import * as THREE from "three";
+			import * as VAX from "vax";
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+			//С кръстосано гледане работи с очилата
+			VAX.init(animate);
+			//Поставяме камерата в центъра на куба
+			VAX.camera.position.set(0,0,0);
+			//Светлини
+			VAX.light.intensity = 1;
+			const pointLight = new THREE.PointLight( 0xffffff, 4, 2000,0);
+			pointLight.position.set( 0, 0, 0 );
+			VAX.scene.add( pointLight );
+
+
+			VAX.scene.background = new THREE.CubeTextureLoader().load([
+						'cube/posx.jpg', 'cube/negx.jpg',
+						'cube/posy.jpg', 'cube/negy.jpg',
+						'cube/posz.jpg', 'cube/negz.jpg']);
+			VAX.scene.background.colorSpace = THREE.LinearSRGBColorSpace;
+
+			//куб
+			var side =800;
+			var coneSize=75;
+			var coneR = coneSize/4;
+			var coneGeo = new THREE.DodecahedronGeometry(100,0);
+			var offset=coneSize/2;
+			const cones = [];
+			for(var i=0; i<11; i++){
+				var mat = new THREE.MeshPhysicalMaterial({roughness:0, transmission: 1, thickness:10})
+				var cone = new THREE.Mesh(coneGeo,mat);
+				var num = Math.random()*3*Math.PI;
+				cone.position.set(side*Math.sin(num),Math.random()*side/2,side*Math.cos(num));
+				cones[i]=cone;
+				VAX.scene.add(cone);
+			}
+
+
+			//Следим накъде гледа камерата
+			var x=0,y=0,z=0;
+			var alpha=0;
+			var beta=0;
+
+			//От сферични координати преминаваме в декартови
+			var updateCameraPosition =()=>{
+				z=Math.cos(alpha)*Math.sin(beta);
+				x=Math.sin(alpha)*Math.sin(beta);
+				y=Math.cos(beta);
+				VAX.camera.lookAt(x,y,z);
+			}
+
+			//Контроли за компютър
+			window.addEventListener('keydown',(event)=>{
+				if(event.key=='ArrowDown'){
+					if(beta<Math.PI-0.2)
+					beta+=0.1;
+				}
+				if(event.key=='ArrowUp'){
+					if(beta>1)
+					beta-=0.1;
+				}
+				if(event.key=='ArrowLeft'){
+					alpha+=0.1;
+				}
+				if(event.key=='ArrowRight'){
+					alpha-=0.1;
+				}
+				updateCameraPosition();
+			})
+			
+			//Позволението трябва да се получи чрез бутон
+			document.getElementById('permission-button').addEventListener('click',startOrientation)
+
+			//Взимане на ъглите и преместване на камерата
+			function getAngles(event){
+					//Взимаме информация за алфа 
+					var aa =Math.round(event.alpha);
+					//Ориентация по подразбиране -> изправен вертикално телефон
+					//Не е предназначен за очила, но се движи 
+					if(window.orientation == 180 || window.orientation == 0){
+						var bb = 180-event.beta;
+						var b = bb/180*Math.PI;
+						if(bb>0 && bb<180){
+							beta = b;
+						}
+						alpha=aa/180*Math.PI;
+					}
+					//Хоризонтално обърнат телефон -> горна част надясно 
+					if(window.orientation == 90){
+						var bb = event.gamma;
+						//Северно полукълбо
+						if(bb<0 && bb>=-90){
+							beta = (180-Math.abs(bb))/180*Math.PI;
+							alpha=aa/180*Math.PI;
+						}
+						//Южно полукълбо
+						else if(bb>=0 && bb<=90){
+							beta = Math.abs(bb)/180*Math.PI;
+							alpha= (aa-180)/180*Math.PI;
+						}
+					}
+					//Хоризонтално обърнат телефон -> горна част наляво
+					if(window.orientation == -90){
+						var bb = event.gamma;
+						//Южно полукълбо
+						if(bb<=0 && bb>=-90){
+							beta = Math.PI-(180-Math.abs(bb))/180*Math.PI;
+							alpha= aa/180*Math.PI;
+						}
+						//Северно полукълбо
+						else if(bb>=0 && bb<=90){
+							beta = Math.PI-Math.abs(bb)/180*Math.PI;
+							alpha= (aa-180)/180*Math.PI;
+						}
+					}
+								
+				updateCameraPosition();
+			}
+
+			//Не позволяваме заспиване на телефона -> библиотека NoSleep.min.js
+			var noSleep = new NoSleep();
+			function enableNoSleep() {
+			  noSleep.enable();
+			  document.removeEventListener('touchstart', enableNoSleep, false);
+			}
+			//Задейства се с докосване на екрана
+			document.addEventListener('touchstart', enableNoSleep, false);
+			
+
+			function startOrientation(){
+				alert("orientation")
+				//Премахваме бутона
+				document.getElementById("permission-section").style.display="none";
+				//Питаме за позволение за ориентацията на устройството
+				if(typeof DeviceOrientationEvent.requestPermission=="function"){
+					//IOS
+					DeviceOrientationEvent.requestPermission()
+					.then(function(response){
+						if(response=='granted'){
+							alert('Permission granted')
+							window.addEventListener('deviceorientation',getAngles,true);
+							enableNoSleep()
+						}
+						else{
+							alert('Access denied');
+						}
+					});	
+				}
+				else {
+					//Android
+					alert('Permission not needed')
+					window.addEventListener('deviceorientation',getAngles,true);
+					enableNoSleep()
+				}
+			}
+
+			function animate(t)
+			{
+				for(var i=0; i<cones.length; i++ ){
+					cones[i].rotation.set(Math.sin(t/4),Math.cos(t/4),t/i);
+					cones[i].position.y += i/10*Math.sin(t/(i*10));
+				}
+			}
+			
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
