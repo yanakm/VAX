@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Конуси в куб</title>
+		<title>Кристални нашественици</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		
@@ -204,26 +204,16 @@
 				}
 			}
 
-			var n = 10*cones.length;
 			function animate(t)
 			{
 				//Леко движение на обектите
 				for(var i=0; i<cones.length; i++ ){
 					cones[i].rotation.set(Math.sin(t/4),Math.cos(t/4),t/i);
-					cones[i].position.y += i/n*Math.sin(t*i/n);
 				}
 			}
 			
 		</script>
 	</body>
 </html>
-
-
-
-
-
-
-
-
 
 
