@@ -68,7 +68,7 @@
 			//Сфера от обекти
 			var r =100;
 			var objGeo = new THREE.DodecahedronGeometry(10);
-			const cones = [];
+			const objects = [];
 			for(var i=0; i<22; i++){
 				var mat = new THREE.MeshPhysicalMaterial({roughness:0, transmission: 1, thickness:11})
 				var cone = new THREE.Mesh(objGeo,mat);
@@ -82,7 +82,7 @@
 				const z = r * Math.cos(beta);
 				cone.position.set(x, y, z);
 				//Прибавяме ги в сцената и в масив, чрез който ги движим
-				cones[i]=cone;
+				objects[i]=cone;
 				VAX.scene.add(cone);
 			}
 
@@ -207,13 +207,21 @@
 			function animate(t)
 			{
 				//Леко движение на обектите
-				for(var i=0; i<cones.length; i++ ){
-					cones[i].rotation.set(Math.sin(t/4),Math.cos(t/4),t/i);
+				for(var i=0; i<objects.length; i++ ){
+					objects[i].rotation.set(Math.sin(t/4),Math.cos(t/4),t/i);
 				}
 			}
 			
 		</script>
 	</body>
 </html>
+
+
+
+
+
+
+
+
 
 
