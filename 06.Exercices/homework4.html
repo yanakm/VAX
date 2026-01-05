@@ -19,7 +19,7 @@
 			#permission-button{
 				width: 60%;
 				height:20%;
-				background-color: rgba(1, 128, 41, 0.311);
+				background-color: rgba(33, 101, 203, 0.311);
 				border: none;
 				color: white;
 				font-size: large;
@@ -36,9 +36,9 @@
 				left:30%;
 				width: 40vw;
 				height: 30vh;
-				background-color: rgba(22, 158, 1, 0.149);
+				background-color: rgba(255, 255, 255, 0.149);
 				backdrop-filter: blur(8px); 
-				border: 1px solid rgba(1, 128, 41, 0.59);
+				border: 1px solid rgba(255, 255, 255, 0.59);
 				border-radius: 16px;
 			}
 		</style>
@@ -54,35 +54,34 @@
 			import * as VAX from "vax";
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-			//С кръстосано гледане работи с очилата
 			VAX.init(animate);
-			//Поставяме камерата в центъра на куба
+			//Поставяме камерата в центъра на сферата от обекти
 			VAX.camera.position.set(0,0,0);
-			//Светлини
-			VAX.light.intensity = 1;
-			const pointLight = new THREE.PointLight( 0xffffff, 4, 2000,0);
-			pointLight.position.set( 0, 0, 0 );
-			VAX.scene.add( pointLight );
 
-
+			//Зареждаме текстурата като фона
 			VAX.scene.background = new THREE.CubeTextureLoader().load([
 						'cube/posx.jpg', 'cube/negx.jpg',
 						'cube/posy.jpg', 'cube/negy.jpg',
 						'cube/posz.jpg', 'cube/negz.jpg']);
 			VAX.scene.background.colorSpace = THREE.LinearSRGBColorSpace;
 
-			//куб
-			var side =800;
-			var coneSize=75;
-			var coneR = coneSize/4;
-			var coneGeo = new THREE.DodecahedronGeometry(100,0);
-			var offset=coneSize/2;
+			//Сфера от обекти
+			var r =100;
+			var objGeo = new THREE.DodecahedronGeometry(10);
 			const cones = [];
-			for(var i=0; i<11; i++){
-				var mat = new THREE.MeshPhysicalMaterial({roughness:0, transmission: 1, thickness:10})
-				var cone = new THREE.Mesh(coneGeo,mat);
-				var num = Math.random()*3*Math.PI;
-				cone.position.set(side*Math.sin(num),Math.random()*side/2,side*Math.cos(num));
+			for(var i=0; i<16; i++){
+				var mat = new THREE.MeshPhysicalMaterial({roughness:0, transmission: 1, thickness:11})
+				var cone = new THREE.Mesh(objGeo,mat);
+				//Поставяме ги случайно по невидимата сфера
+				const a = Math.random();
+				const b = Math.random();
+				const alpha = 2 * Math.PI * a;  
+				const beta = Math.acos(2 * b - 1); 
+				const x = r * Math.sin(beta) * Math.cos(alpha);
+				const y = r * Math.sin(beta) * Math.sin(alpha);
+				const z = r * Math.cos(beta);
+				cone.position.set(x, y, z);
+				//Прибавяме ги в сцената и в масив, чрез който ги движим
 				cones[i]=cone;
 				VAX.scene.add(cone);
 			}
@@ -128,7 +127,6 @@
 					//Взимаме информация за алфа 
 					var aa =Math.round(event.alpha);
 					//Ориентация по подразбиране -> изправен вертикално телефон
-					//Не е предназначен за очила, но се движи 
 					if(window.orientation == 180 || window.orientation == 0){
 						var bb = 180-event.beta;
 						var b = bb/180*Math.PI;
@@ -206,11 +204,13 @@
 				}
 			}
 
+			var n = 10*cones.length;
 			function animate(t)
 			{
+				//Леко движение на обектите
 				for(var i=0; i<cones.length; i++ ){
 					cones[i].rotation.set(Math.sin(t/4),Math.cos(t/4),t/i);
-					cones[i].position.y += i/10*Math.sin(t/(i*10));
+					cones[i].position.y += i/n*Math.sin(t*i/n);
 				}
 			}
 			
